@@ -3,7 +3,7 @@
 
 [package]
 name = "sys"
-version = "0.0.2"
+version = "1.0.0"
 license-file = "LICENSE.txt"
 edition = "2021"
 authors = ["The Maintainers of Nanvix"]
@@ -12,3 +12,6 @@ homepage = "https://github.com/nanvix"
 
 [lib]
 crate-type = ["lib"]
+
+[dependencies]
+error = { git = "https://github.com/nanvix/error", version = "0.0.1" }
