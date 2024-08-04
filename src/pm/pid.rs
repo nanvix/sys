@@ -20,7 +20,7 @@ use crate::error::{
 /// A type that represents a process identifier.
 ///
 #[derive(Default, Clone, Copy, PartialEq, Eq)]
-pub struct ProcessIdentifier(usize);
+pub struct ProcessIdentifier(u32);
 
 //==================================================================================================
 // Implementations
@@ -33,12 +33,12 @@ impl ProcessIdentifier {
     /// Identifier of the process manager daemon process.
     pub const PROCD: ProcessIdentifier = ProcessIdentifier(1);
 
-    pub fn to_ne_bytes(&self) -> [u8; core::mem::size_of::<usize>()] {
+    pub fn to_ne_bytes(&self) -> [u8; core::mem::size_of::<u32>()] {
         self.0.to_ne_bytes()
     }
 
-    pub fn from_ne_bytes(bytes: [u8; core::mem::size_of::<usize>()]) -> Self {
-        Self(usize::from_ne_bytes(bytes))
+    pub fn from_ne_bytes(bytes: [u8; core::mem::size_of::<u32>()]) -> Self {
+        Self(u32::from_ne_bytes(bytes))
     }
 }
 
@@ -48,15 +48,15 @@ impl core::fmt::Debug for ProcessIdentifier {
     }
 }
 
-impl From<usize> for ProcessIdentifier {
-    fn from(id: usize) -> ProcessIdentifier {
+impl From<u32> for ProcessIdentifier {
+    fn from(id: u32) -> ProcessIdentifier {
         ProcessIdentifier(id)
     }
 }
 
 impl From<ProcessIdentifier> for usize {
     fn from(pid: ProcessIdentifier) -> usize {
-        pid.0
+        pid.0 as usize
     }
 }
 
@@ -68,7 +68,7 @@ impl From<ProcessIdentifier> for i32 {
 
 impl From<ProcessIdentifier> for u32 {
     fn from(pid: ProcessIdentifier) -> u32 {
-        pid.0 as u32
+        pid.0
     }
 }
 
@@ -79,7 +79,7 @@ impl TryFrom<i32> for ProcessIdentifier {
         if raw_pid < 0 {
             Err(Error::new(ErrorCode::InvalidArgument, "invalid process identifier"))
         } else {
-            Ok(ProcessIdentifier(raw_pid as usize))
+            Ok(ProcessIdentifier(raw_pid as u32))
         }
     }
 }
