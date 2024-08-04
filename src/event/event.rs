@@ -5,16 +5,14 @@
 // Imports
 //==================================================================================================
 
-use crate::{
-    error::{
-        Error,
-        ErrorCode,
-    },
-    event::{
-        ExceptionEvent,
-        InterruptEvent,
-        SchedulingEvent,
-    },
+use crate::event::{
+    ExceptionEvent,
+    InterruptEvent,
+    SchedulingEvent,
+};
+use ::error::{
+    Error,
+    ErrorCode,
 };
 
 //==================================================================================================
