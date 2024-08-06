@@ -8,7 +8,6 @@
 #![deny(clippy::all)]
 #![forbid(clippy::large_stack_frames)]
 #![forbid(clippy::large_stack_arrays)]
-#![feature(never_type)] // exit() uses this.
 #![no_std]
 
 //==================================================================================================
