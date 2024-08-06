@@ -26,6 +26,9 @@ pub mod event;
 /// Inter process communication.
 pub mod ipc;
 
+/// Helper macros.
+pub mod macros;
+
 /// Memory management.
 pub mod mm;
 
