@@ -19,7 +19,7 @@ use ::error::{
 ///
 /// A type that represents a process identifier.
 ///
-#[derive(Default, Clone, Copy, PartialEq, Eq)]
+#[derive(Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ProcessIdentifier(u32);
 
 //==================================================================================================
