@@ -14,4 +14,4 @@ homepage = "https://github.com/nanvix"
 crate-type = ["lib"]
 
 [dependencies]
-error = { git = "https://github.com/nanvix/error", branch = "releases/v0.0.1" }
+error = { git = "https://github.com/nanvix/error", branch = "releases/v0.0.2" }
