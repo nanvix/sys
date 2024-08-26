@@ -42,6 +42,7 @@ pub struct Message {
     pub message_type: MessageType,
     pub payload: [u8; Self::PAYLOAD_SIZE],
 }
+crate::static_assert_size!(Message, 76);
 
 //==================================================================================================
 //  Implementations
