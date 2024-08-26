@@ -35,6 +35,7 @@ pub enum MessageType {
 }
 crate::static_assert_size!(MessageType, 4);
 
+#[derive(Debug)]
 pub struct Message {
     pub source: ProcessIdentifier,
     pub destination: ProcessIdentifier,
