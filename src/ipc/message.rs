@@ -12,12 +12,21 @@ use ::core::fmt;
 //  Structures
 //==================================================================================================
 
+///
+/// # Description
+///
+/// Type that describes what the message is about.
+///
 #[derive(Copy, Clone)]
 #[repr(u32)]
 pub enum MessageType {
+    /// The message encodes information about an interrupt that occurred.
     Interrupt,
+    /// The message encodes information about an exception that occurred.
     Exception,
+    /// The message carries information sent by a process to another.
     Ipc,
+    /// The message encodes information about a scheduling event.
     SchedulingEvent,
 }
 crate::static_assert_size!(MessageType, 4);
