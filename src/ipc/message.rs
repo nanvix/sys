@@ -35,11 +35,20 @@ pub enum MessageType {
 }
 crate::static_assert_size!(MessageType, 4);
 
+///
+/// # Description
+///
+/// A structure that represents a message that can be sent between processes.
+///
 #[derive(Debug)]
 pub struct Message {
+    /// Process that sent the message.
     pub source: ProcessIdentifier,
+    /// Process that should receive the message.
     pub destination: ProcessIdentifier,
+    /// Type of the message.
     pub message_type: MessageType,
+    /// Payload of the message.
     pub payload: [u8; Self::PAYLOAD_SIZE],
 }
 crate::static_assert_size!(Message, 76);
