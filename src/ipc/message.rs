@@ -6,11 +6,13 @@
 //==================================================================================================
 
 use crate::pm::ProcessIdentifier;
+use ::core::fmt;
 
 //==================================================================================================
 //  Structures
 //==================================================================================================
 
+#[derive(Copy, Clone)]
 #[repr(u32)]
 pub enum MessageType {
     Interrupt,
@@ -30,6 +32,17 @@ pub struct Message {
 //==================================================================================================
 //  Implementations
 //==================================================================================================
+
+impl fmt::Debug for MessageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            MessageType::Interrupt => write!(f, "interrupt"),
+            MessageType::Exception => write!(f, "exception"),
+            MessageType::Ipc => write!(f, "ipc"),
+            MessageType::SchedulingEvent => write!(f, "scheduling event"),
+        }
+    }
+}
 
 impl Message {
     pub const SIZE: usize = 64;
