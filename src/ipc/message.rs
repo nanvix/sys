@@ -40,7 +40,7 @@ pub struct Message {
     pub source: ProcessIdentifier,
     pub destination: ProcessIdentifier,
     pub message_type: MessageType,
-    pub payload: [u8; Self::SIZE],
+    pub payload: [u8; Self::PAYLOAD_SIZE],
 }
 
 //==================================================================================================
@@ -106,7 +106,7 @@ impl fmt::Debug for MessageType {
 }
 
 impl Message {
-    pub const SIZE: usize = 64;
+    pub const PAYLOAD_SIZE: usize = 64;
 
     ///
     /// # Description
@@ -126,7 +126,7 @@ impl Message {
     pub fn new(
         source: ProcessIdentifier,
         destination: ProcessIdentifier,
-        payload: [u8; Self::SIZE],
+        payload: [u8; Self::PAYLOAD_SIZE],
         message_type: MessageType,
     ) -> Self {
         Self {
@@ -143,7 +143,7 @@ impl Default for Message {
         Self {
             source: ProcessIdentifier::KERNEL,
             destination: ProcessIdentifier::KERNEL,
-            payload: [0; Self::SIZE],
+            payload: [0; Self::PAYLOAD_SIZE],
             message_type: MessageType::Ipc,
         }
     }

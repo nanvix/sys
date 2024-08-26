@@ -31,7 +31,7 @@ pub struct EventInformation {
 
 impl From<EventInformation> for Message {
     fn from(info: EventInformation) -> Self {
-        let mut payload: [u8; Message::SIZE] = [0; Message::SIZE];
+        let mut payload: [u8; Message::PAYLOAD_SIZE] = [0; Message::PAYLOAD_SIZE];
 
         let mut offset: usize = 0;
         payload[offset..offset + core::mem::size_of::<EventDescriptor>()]
