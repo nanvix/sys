@@ -11,12 +11,14 @@ use crate::pm::ProcessIdentifier;
 //  Structures
 //==================================================================================================
 
+#[repr(u32)]
 pub enum MessageType {
     Interrupt,
     Exception,
     Ipc,
     SchedulingEvent,
 }
+crate::static_assert_size!(MessageType, 4);
 
 pub struct Message {
     pub source: ProcessIdentifier,
