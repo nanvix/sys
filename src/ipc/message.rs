@@ -117,6 +117,7 @@ impl Message {
     ///
     /// - `source`: The source process.
     /// - `destination`: The destination process.
+    /// - `message_type`: The type of the message.
     /// - `payload`: The message payload.
     ///
     /// # Returns
@@ -126,8 +127,8 @@ impl Message {
     pub fn new(
         source: ProcessIdentifier,
         destination: ProcessIdentifier,
-        payload: [u8; Self::PAYLOAD_SIZE],
         message_type: MessageType,
+        payload: [u8; Self::PAYLOAD_SIZE],
     ) -> Self {
         Self {
             source,
