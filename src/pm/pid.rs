@@ -21,6 +21,7 @@ use ::error::{
 ///
 #[derive(Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ProcessIdentifier(u32);
+crate::static_assert_size!(ProcessIdentifier, 4);
 
 //==================================================================================================
 // Implementations
