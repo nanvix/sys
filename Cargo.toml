@@ -3,7 +3,7 @@
 
 [package]
 name = "sys"
-version = "1.2.0"
+version = "1.2.1"
 license-file = "LICENSE.txt"
 edition = "2021"
 authors = ["The Maintainers of Nanvix"]
@@ -14,7 +14,7 @@ homepage = "https://github.com/nanvix"
 crate-type = ["lib"]
 
 [dependencies]
-error = { git = "https://github.com/nanvix/error", branch = "releases/v0.0.3" }
+error = { git = "https://github.com/nanvix/error", branch = "releases/v0.0.4" }
 
 [profile.release]
 opt-level = 3
