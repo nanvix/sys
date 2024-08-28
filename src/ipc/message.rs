@@ -22,6 +22,7 @@ use ::error::Error;
 /// A structure that represents a message that can be sent between processes.
 ///
 #[derive(Debug)]
+#[repr(C)]
 pub struct Message {
     /// Process that sent the message.
     pub source: ProcessIdentifier,

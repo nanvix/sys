@@ -20,6 +20,7 @@ use ::error::{
 /// A type that represents a process identifier.
 ///
 #[derive(Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[repr(C)]
 pub struct ProcessIdentifier(u32);
 crate::static_assert_size!(ProcessIdentifier, 4);
 
