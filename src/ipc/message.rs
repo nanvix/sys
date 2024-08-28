@@ -21,7 +21,7 @@ use ::error::Error;
 ///
 /// Type that describes what the message is about.
 ///
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 pub enum MessageType {
     /// The message encodes information about an interrupt that occurred.
