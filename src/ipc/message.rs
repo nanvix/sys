@@ -109,7 +109,7 @@ impl fmt::Debug for MessageType {
         match self {
             MessageType::Interrupt => write!(f, "interrupt"),
             MessageType::Exception => write!(f, "exception"),
-            MessageType::Ipc => write!(f, "ipc"),
+            MessageType::Ipc => write!(f, "inter-process communication"),
             MessageType::SchedulingEvent => write!(f, "scheduling event"),
         }
     }
