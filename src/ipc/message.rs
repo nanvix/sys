@@ -32,6 +32,8 @@ pub enum MessageType {
     Ipc,
     /// The message encodes information about a scheduling event.
     SchedulingEvent,
+    /// The message carries information sent from one kernel to another.
+    Ikc,
 }
 crate::static_assert_size!(MessageType, 4);
 
@@ -76,6 +78,7 @@ impl MessageType {
             MessageType::Exception => 1u32.to_ne_bytes(),
             MessageType::Ipc => 2u32.to_ne_bytes(),
             MessageType::SchedulingEvent => 3u32.to_ne_bytes(),
+            MessageType::Ikc => 4u32.to_ne_bytes(),
         }
     }
 
@@ -99,6 +102,7 @@ impl MessageType {
             1 => Ok(MessageType::Exception),
             2 => Ok(MessageType::Ipc),
             3 => Ok(MessageType::SchedulingEvent),
+            4 => Ok(MessageType::Ikc),
             _ => Err(Error::new(error::ErrorCode::InvalidMessage, "invalid message type")),
         }
     }
@@ -111,6 +115,7 @@ impl fmt::Debug for MessageType {
             MessageType::Exception => write!(f, "exception"),
             MessageType::Ipc => write!(f, "inter-process communication"),
             MessageType::SchedulingEvent => write!(f, "scheduling event"),
+            MessageType::Ikc => write!(f, "inter-kernel communication"),
         }
     }
 }
