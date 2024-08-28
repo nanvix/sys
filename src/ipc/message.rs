@@ -22,6 +22,7 @@ use ::error::Error;
 /// A structure that represents a message that can be sent between processes.
 ///
 #[derive(Debug)]
+#[repr(C)]
 pub struct Message {
     /// Process that sent the message.
     pub source: ProcessIdentifier,
@@ -32,17 +33,19 @@ pub struct Message {
     /// Payload of the message.
     pub payload: [u8; Self::PAYLOAD_SIZE],
 }
-crate::static_assert_size!(Message, 76);
+crate::static_assert_size!(Message, Message::TOTAL_SIZE);
 
 //==================================================================================================
 //  Implementations
 //==================================================================================================
 
 impl Message {
+    /// Total Size of a message.
+    pub const TOTAL_SIZE: usize = 64;
     /// The size of the message header fields (source, destination and type).
     pub const HEADER_SIZE: usize = 2 * mem::size_of::<ProcessIdentifier>() + MessageType::SIZE;
     /// The size of the message's payload.
-    pub const PAYLOAD_SIZE: usize = 64;
+    pub const PAYLOAD_SIZE: usize = Self::TOTAL_SIZE - Self::HEADER_SIZE;
 
     ///
     /// # Description
