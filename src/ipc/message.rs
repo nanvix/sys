@@ -24,12 +24,12 @@ use ::error::Error;
 #[derive(Debug)]
 #[repr(C)]
 pub struct Message {
+    /// Type of the message.
+    pub message_type: MessageType,
     /// Process that sent the message.
     pub source: ProcessIdentifier,
     /// Process that should receive the message.
     pub destination: ProcessIdentifier,
-    /// Type of the message.
-    pub message_type: MessageType,
     /// Payload of the message.
     pub payload: [u8; Self::PAYLOAD_SIZE],
 }
@@ -70,10 +70,10 @@ impl Message {
         payload: [u8; Self::PAYLOAD_SIZE],
     ) -> Self {
         Self {
+            message_type,
             source,
             destination,
             payload,
-            message_type,
         }
     }
 
@@ -92,6 +92,10 @@ impl Message {
 
         let mut offset: usize = 0;
 
+        // Serialize the message type.
+        bytes[offset..(offset + MessageType::SIZE)].copy_from_slice(&self.message_type.to_bytes());
+        offset += MessageType::SIZE;
+
         // Serialize the source process identifier.
         bytes[offset..(offset + mem::size_of::<ProcessIdentifier>())]
             .copy_from_slice(&self.source.to_ne_bytes());
@@ -101,10 +105,6 @@ impl Message {
         bytes[offset..(offset + mem::size_of::<ProcessIdentifier>())]
             .copy_from_slice(&self.destination.to_ne_bytes());
         offset += mem::size_of::<ProcessIdentifier>();
-
-        // Serialize the message type.
-        bytes[offset..(offset + MessageType::SIZE)].copy_from_slice(&self.message_type.to_bytes());
-        offset += MessageType::SIZE;
 
         // Serialize the payload.
         bytes[offset..(offset + Self::PAYLOAD_SIZE)].copy_from_slice(&self.payload);
@@ -135,6 +135,17 @@ impl Message {
             return Err(Error::new(error::ErrorCode::NoMessageAvailable, "no message available"));
         }
 
+        // Deserialize the message type.
+        let message_type: MessageType = MessageType::try_from_bytes(
+            match bytes[offset..(offset + MessageType::SIZE)].try_into() {
+                Ok(bytes) => bytes,
+                Err(_) => {
+                    return Err(Error::new(error::ErrorCode::InvalidMessage, "invalid message"))
+                },
+            },
+        )?;
+        offset += MessageType::SIZE;
+
         // Deserialize the source process identifier.
         let source: ProcessIdentifier = ProcessIdentifier::from_ne_bytes(
             match bytes[offset..(offset + mem::size_of::<ProcessIdentifier>())].try_into() {
@@ -157,25 +168,14 @@ impl Message {
         );
         offset += mem::size_of::<ProcessIdentifier>();
 
-        // Deserialize the message type.
-        let message_type: MessageType = MessageType::try_from_bytes(
-            match bytes[offset..(offset + MessageType::SIZE)].try_into() {
-                Ok(bytes) => bytes,
-                Err(_) => {
-                    return Err(Error::new(error::ErrorCode::InvalidMessage, "invalid message"))
-                },
-            },
-        )?;
-        offset += MessageType::SIZE;
-
         // Deserialize the payload.
         let mut payload: [u8; Self::PAYLOAD_SIZE] = [0; Self::PAYLOAD_SIZE];
         payload.copy_from_slice(&bytes[offset..(offset + Self::PAYLOAD_SIZE)]);
 
         Ok(Self {
+            message_type,
             source,
             destination,
-            message_type,
             payload,
         })
     }
@@ -184,10 +184,10 @@ impl Message {
 impl Default for Message {
     fn default() -> Self {
         Self {
+            message_type: MessageType::Ipc,
             source: ProcessIdentifier::KERNEL,
             destination: ProcessIdentifier::KERNEL,
             payload: [0; Self::PAYLOAD_SIZE],
-            message_type: MessageType::Ipc,
         }
     }
 }
