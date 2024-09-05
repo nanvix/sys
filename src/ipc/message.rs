@@ -86,30 +86,8 @@ impl Message {
     ///
     /// A byte array that represents the target message.
     ///
-    pub fn to_bytes(&self) -> [u8; Self::HEADER_SIZE + Self::PAYLOAD_SIZE] {
-        let mut bytes: [u8; Self::HEADER_SIZE + Self::PAYLOAD_SIZE] =
-            [0; Self::HEADER_SIZE + Self::PAYLOAD_SIZE];
-
-        let mut offset: usize = 0;
-
-        // Serialize the message type.
-        bytes[offset..(offset + MessageType::SIZE)].copy_from_slice(&self.message_type.to_bytes());
-        offset += MessageType::SIZE;
-
-        // Serialize the source process identifier.
-        bytes[offset..(offset + mem::size_of::<ProcessIdentifier>())]
-            .copy_from_slice(&self.source.to_ne_bytes());
-        offset += mem::size_of::<ProcessIdentifier>();
-
-        // Serialize the destination process identifier.
-        bytes[offset..(offset + mem::size_of::<ProcessIdentifier>())]
-            .copy_from_slice(&self.destination.to_ne_bytes());
-        offset += mem::size_of::<ProcessIdentifier>();
-
-        // Serialize the payload.
-        bytes[offset..(offset + Self::PAYLOAD_SIZE)].copy_from_slice(&self.payload);
-
-        bytes
+    pub fn to_bytes(self) -> [u8; Self::HEADER_SIZE + Self::PAYLOAD_SIZE] {
+        unsafe { mem::transmute(self) }
     }
 
     ///
@@ -128,56 +106,7 @@ impl Message {
     pub fn try_from_bytes(
         bytes: [u8; Self::HEADER_SIZE + Self::PAYLOAD_SIZE],
     ) -> Result<Self, Error> {
-        let mut offset: usize = 0;
-
-        // Deserialize the message type.
-        let message_type: MessageType = MessageType::try_from_bytes(
-            match bytes[offset..(offset + MessageType::SIZE)].try_into() {
-                Ok(bytes) => bytes,
-                Err(_) => {
-                    return Err(Error::new(error::ErrorCode::InvalidMessage, "invalid message"))
-                },
-            },
-        )?;
-        offset += MessageType::SIZE;
-
-        // Check for empty message.
-        if message_type == MessageType::Empty {
-            return Err(Error::new(error::ErrorCode::NoMessageAvailable, "no message available"));
-        }
-
-        // Deserialize the source process identifier.
-        let source: ProcessIdentifier = ProcessIdentifier::from_ne_bytes(
-            match bytes[offset..(offset + mem::size_of::<ProcessIdentifier>())].try_into() {
-                Ok(bytes) => bytes,
-                Err(_) => {
-                    return Err(Error::new(error::ErrorCode::InvalidMessage, "invalid message"))
-                },
-            },
-        );
-        offset += mem::size_of::<ProcessIdentifier>();
-
-        // Deserialize the destination process identifier.
-        let destination: ProcessIdentifier = ProcessIdentifier::from_ne_bytes(
-            match bytes[offset..(offset + mem::size_of::<ProcessIdentifier>())].try_into() {
-                Ok(bytes) => bytes,
-                Err(_) => {
-                    return Err(Error::new(error::ErrorCode::InvalidMessage, "invalid message"))
-                },
-            },
-        );
-        offset += mem::size_of::<ProcessIdentifier>();
-
-        // Deserialize the payload.
-        let mut payload: [u8; Self::PAYLOAD_SIZE] = [0; Self::PAYLOAD_SIZE];
-        payload.copy_from_slice(&bytes[offset..(offset + Self::PAYLOAD_SIZE)]);
-
-        Ok(Self {
-            message_type,
-            source,
-            destination,
-            payload,
-        })
+        Ok(unsafe { mem::transmute(bytes) })
     }
 }
 
