@@ -130,11 +130,6 @@ impl Message {
     ) -> Result<Self, Error> {
         let mut offset: usize = 0;
 
-        // Check for empty message.
-        if bytes.iter().all(|&byte| byte == 0) {
-            return Err(Error::new(error::ErrorCode::NoMessageAvailable, "no message available"));
-        }
-
         // Deserialize the message type.
         let message_type: MessageType = MessageType::try_from_bytes(
             match bytes[offset..(offset + MessageType::SIZE)].try_into() {
@@ -145,6 +140,11 @@ impl Message {
             },
         )?;
         offset += MessageType::SIZE;
+
+        // Check for empty message.
+        if message_type == MessageType::Empty {
+            return Err(Error::new(error::ErrorCode::NoMessageAvailable, "no message available"));
+        }
 
         // Deserialize the source process identifier.
         let source: ProcessIdentifier = ProcessIdentifier::from_ne_bytes(
@@ -184,7 +184,7 @@ impl Message {
 impl Default for Message {
     fn default() -> Self {
         Self {
-            message_type: MessageType::Ipc,
+            message_type: MessageType::Empty,
             source: ProcessIdentifier::KERNEL,
             destination: ProcessIdentifier::KERNEL,
             payload: [0; Self::PAYLOAD_SIZE],
