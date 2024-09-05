@@ -130,6 +130,11 @@ impl Message {
     ) -> Result<Self, Error> {
         let mut offset: usize = 0;
 
+        // Check for empty message.
+        if bytes.iter().all(|&byte| byte == 0) {
+            return Err(Error::new(error::ErrorCode::NoMessageAvailable, "no message available"));
+        }
+
         // Deserialize the source process identifier.
         let source: ProcessIdentifier = ProcessIdentifier::from_ne_bytes(
             match bytes[offset..(offset + mem::size_of::<ProcessIdentifier>())].try_into() {
