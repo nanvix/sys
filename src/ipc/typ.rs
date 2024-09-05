@@ -23,6 +23,8 @@ use ::error::Error;
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 pub enum MessageType {
+    /// The message is empty.
+    Empty,
     /// The message encodes information about an interrupt that occurred.
     Interrupt,
     /// The message encodes information about an exception that occurred.
@@ -55,11 +57,12 @@ impl MessageType {
     ///
     pub fn to_bytes(&self) -> [u8; Self::SIZE] {
         match self {
-            MessageType::Interrupt => 0u32.to_ne_bytes(),
-            MessageType::Exception => 1u32.to_ne_bytes(),
-            MessageType::Ipc => 2u32.to_ne_bytes(),
-            MessageType::SchedulingEvent => 3u32.to_ne_bytes(),
-            MessageType::Ikc => 4u32.to_ne_bytes(),
+            MessageType::Empty => 0u32.to_ne_bytes(),
+            MessageType::Interrupt => 1u32.to_ne_bytes(),
+            MessageType::Exception => 2u32.to_ne_bytes(),
+            MessageType::Ipc => 3u32.to_ne_bytes(),
+            MessageType::SchedulingEvent => 4u32.to_ne_bytes(),
+            MessageType::Ikc => 5u32.to_ne_bytes(),
         }
     }
 
@@ -79,11 +82,12 @@ impl MessageType {
     ///
     pub fn try_from_bytes(bytes: [u8; Self::SIZE]) -> Result<Self, Error> {
         match u32::from_ne_bytes(bytes) {
-            0 => Ok(MessageType::Interrupt),
-            1 => Ok(MessageType::Exception),
-            2 => Ok(MessageType::Ipc),
-            3 => Ok(MessageType::SchedulingEvent),
-            4 => Ok(MessageType::Ikc),
+            0 => Ok(MessageType::Empty),
+            1 => Ok(MessageType::Interrupt),
+            2 => Ok(MessageType::Exception),
+            3 => Ok(MessageType::Ipc),
+            4 => Ok(MessageType::SchedulingEvent),
+            5 => Ok(MessageType::Ikc),
             _ => Err(Error::new(error::ErrorCode::InvalidMessage, "invalid message type")),
         }
     }
@@ -92,6 +96,7 @@ impl MessageType {
 impl fmt::Debug for MessageType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            MessageType::Empty => write!(f, "empty"),
             MessageType::Interrupt => write!(f, "interrupt"),
             MessageType::Exception => write!(f, "exception"),
             MessageType::Ipc => write!(f, "inter-process communication"),
