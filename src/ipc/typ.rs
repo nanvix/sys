@@ -5,11 +5,14 @@
 //  Imports
 //==================================================================================================
 
+use crate::error::{
+    Error,
+    ErrorCode,
+};
 use ::core::{
     fmt,
     mem,
 };
-use ::error::Error;
 
 //==================================================================================================
 //  Structures
@@ -88,7 +91,7 @@ impl MessageType {
             3 => Ok(MessageType::Ipc),
             4 => Ok(MessageType::SchedulingEvent),
             5 => Ok(MessageType::Ikc),
-            _ => Err(Error::new(error::ErrorCode::InvalidMessage, "invalid message type")),
+            _ => Err(Error::new(ErrorCode::InvalidMessage, "invalid message type")),
         }
     }
 }

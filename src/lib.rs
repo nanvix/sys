@@ -8,7 +8,14 @@
 #![deny(clippy::all)]
 #![forbid(clippy::large_stack_frames)]
 #![forbid(clippy::large_stack_arrays)]
+#![feature(ptr_sub_ptr)] // Slab::deallocate() uses this.
 #![no_std]
+
+//==================================================================================================
+// Imports
+//==================================================================================================
+
+extern crate alloc;
 
 //==================================================================================================
 // Modules
@@ -17,8 +24,14 @@
 /// System configuration constants.
 pub mod config;
 
+/// Collections.
+pub mod collections;
+
 /// System constants.
 pub mod constants;
+
+/// Error codes.
+pub mod error;
 
 /// Events.
 pub mod event;

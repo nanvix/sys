@@ -10,7 +10,7 @@ use crate::mm::{
     Address,
     Alignment,
 };
-use ::error::Error;
+use crate::error::Error;
 
 //==================================================================================================
 // Structures
