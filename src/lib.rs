@@ -20,6 +20,9 @@ pub mod config;
 /// System constants.
 pub mod constants;
 
+/// Error codes.
+pub mod error;
+
 /// Events.
 pub mod event;
 

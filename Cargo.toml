@@ -13,9 +13,6 @@ homepage = "https://github.com/nanvix"
 [lib]
 crate-type = ["lib"]
 
-[dependencies]
-error = { git = "https://github.com/nanvix/error", branch = "releases/v0.0.5" }
-
 [profile.release]
 opt-level = 3
 debug = false

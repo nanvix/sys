@@ -10,7 +10,7 @@ use crate::{
     pm::ProcessIdentifier,
 };
 use ::core::mem;
-use ::error::Error;
+use crate::error::Error;
 
 //==================================================================================================
 //  Structures
